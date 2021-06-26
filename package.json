@@ -10,6 +10,7 @@
         "production": "mix --production"
     },
     "devDependencies": {
+        "@popperjs/core": "^2.9.2",
         "axios": "^0.21",
         "laravel-mix": "^6.0.6",
         "lodash": "^4.17.19",
@@ -19,7 +20,10 @@
         "sass-loader": "^12.1.0"
     },
     "dependencies": {
+        "@mdi/font": "^5.9.55",
         "@vue/compiler-sfc": "^3.1.2",
+        "bootstrap": "^5.0.2",
+        "bootstrap-icons": "^1.5.0",
         "vue": "^3.1.2",
         "vue-loader": "^16.2.0",
         "vuex": "^4.0.2"

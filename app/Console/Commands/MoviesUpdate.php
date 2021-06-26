@@ -2,7 +2,12 @@
 
 namespace App\Console\Commands;
 
+use App\Models\Movie;
 use Illuminate\Console\Command;
+use Illuminate\Contracts\Filesystem\FileNotFoundException;
+use Illuminate\Http\Client\ConnectionException;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Storage;
 
 class MoviesUpdate extends Command
 {
@@ -11,7 +16,7 @@ class MoviesUpdate extends Command
      *
      * @var string
      */
-    protected $signature = 'command:name';
+    protected $signature = 'movies:update';
 
     /**
      * The console command description.
@@ -21,22 +26,49 @@ class MoviesUpdate extends Command
     protected $description = 'Command description';
 
     /**
-     * Create a new command instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
-    /**
      * Execute the console command.
-     *
-     * @return int
+     * @return void
+     * @throws FileNotFoundException
      */
     public function handle()
     {
-        return 0;
+        $contents = Storage::disk('movies')->get('movies.json');
+        $data = json_decode($contents, true);
+        $token = env('MOVIE_APP_TOKEN');
+        $url = env('MOVIE_APP_URL');
+        try {
+            //$response = Http::acceptJson()->get($url . '/all/page/1/token/' . $token);
+            //$data = json_decode($response, true);
+            $this->insertDb($data);
+            $this->info('The command was successful!');
+        } catch (ConnectionException $error) {
+            exit($error->getMessage());
+        }
+    }
+
+    /**
+     * @param array $data
+     * @return void
+     */
+    private function insertDb($data)
+    {
+        foreach ($data['movies'] as $key => $value) {
+            Movie::updateOrCreate(['id_kinopoisk' => $value['id_kinopoisk']], [
+                'id_kinopoisk'      => $value['id_kinopoisk'],
+                'url'               => $value['url'],
+                'type'              => $value['type'],
+                'title'             => $value['title'],
+                'title_alternative' => $value['title_alternative'],
+                'tagline'           => $value['tagline'],
+                'description'       => $value['description'],
+                'year'              => $value['year'],
+                'poster'            => $value['poster'],
+                'trailer'           => $value['trailer'],
+                'age'               => $value['age'],
+                'actors'            => $value['actors'],
+                'countries'         => $value['countries'],
+                'genres'            => $value['genres'],
+            ]);
+        }
     }
 }

@@ -7,6 +7,7 @@
 
                     <div class="card-body">
                         {{ $store.state.title }}
+                        <i class="bi bi-align-bottom"></i>
                     </div>
                 </div>
             </div>
