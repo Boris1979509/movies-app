@@ -1,8 +1,13 @@
 import {createStore} from 'vuex'
+import movies from "./modules/movies";
 
-export default createStore({
+const store = createStore({
     state: {
-        title: "INDEX"
+        title: "Кинопоиск API"
     },
-    modules: {}
+    modules: {
+        movies
+    }
 });
+store.dispatch('initMoviesStore').then(() => console.log('Init movies'));
+export default store;

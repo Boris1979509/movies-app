@@ -2,25 +2,31 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Movie;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
 class MovieController extends Controller
 {
     /**
-     * Display a listing of the resource.
-     *
-     * @return void
+     * Paginate
+     */
+    const LIMIT_PER_PAGE = 8;
+
+    /**
+     * @return JsonResponse
      */
     public function index()
     {
-        //
+        return response()->json(
+            Movie::latest()->paginate(self::LIMIT_PER_PAGE)); // order results by date
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return Response
      */
     public function store(Request $request)
@@ -31,7 +37,7 @@ class MovieController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return Response
      */
     public function show($id)
@@ -42,8 +48,8 @@ class MovieController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
      * @return Response
      */
     public function update(Request $request, $id)
@@ -54,7 +60,7 @@ class MovieController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param int $id
      * @return Response
      */
     public function destroy($id)

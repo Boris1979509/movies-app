@@ -1,24 +1,46 @@
 <template>
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-8">
-                <div class="card">
-                    <div class="card-header">Example Component</div>
-
-                    <div class="card-body">
-                        {{ $store.state.title }}
-                        <i class="bi bi-align-bottom"></i>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+    <poster-bg
+        :poster="posterBg"
+    />
+    <movies-list
+        :movies="movies"
+        @changePoster="onChangePoster"
+    />
+    <template v-if="isPaginate">
+        <movies-pagination :pagination="pagination"/>
+    </template>
 </template>
 
 <script>
+    import {mapActions, mapGetters} from 'vuex';
+    import MoviesList from "./movies/MoviesList";
+    import PosterBg from "./movies/PosterBg";
+    import MoviesPagination from "./movies/MoviesPagination";
+
     export default {
-        mounted() {
-            console.log('Component mounted.')
+        name: "App",
+        data() {
+            return {
+                posterBg: ""
+            }
+        },
+        computed: {
+            // import name, getter name
+            ...mapGetters("movies", ["pagination"]),
+            ...mapGetters("movies", ["movies"]),
+            isPaginate() {
+                return this.pagination.total > this.pagination.per_page
+            }
+        },
+        methods: {
+            onChangePoster(poster) {
+                this.posterBg = poster
+            }
+        },
+        components: {
+            MoviesList,
+            PosterBg,
+            MoviesPagination
         }
     }
 </script>

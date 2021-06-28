@@ -9,6 +9,10 @@ use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
 
+/**
+ * Class MoviesUpdate
+ * @package App\Console\Commands
+ */
 class MoviesUpdate extends Command
 {
     /**
@@ -26,22 +30,26 @@ class MoviesUpdate extends Command
     protected $description = 'Command description';
 
     /**
-     * Execute the console command.
      * @return void
-     * @throws FileNotFoundException
      */
     public function handle()
     {
-        $contents = Storage::disk('movies')->get('movies.json');
-        $data = json_decode($contents, true);
+        //$contents = Storage::disk('movies')->get('movies.json');
+        //$data = json_decode($contents, true);
         $token = env('MOVIE_APP_TOKEN');
         $url = env('MOVIE_APP_URL');
         try {
-            //$response = Http::acceptJson()->get($url . '/all/page/1/token/' . $token);
-            //$data = json_decode($response, true);
-            $this->insertDb($data);
+
+            $i = 1;
+            while ($i <= 10) {
+                $response = Http::acceptJson()->get($url . '/all/page/' . random_int(1, 1000) . '/token/' . $token);
+                $data = json_decode($response, true);
+                $this->insertDb($data);
+                $i++;
+            }
             $this->info('The command was successful!');
-        } catch (ConnectionException $error) {
+
+        } catch (\Exception $error) {
             exit($error->getMessage());
         }
     }

@@ -21,15 +21,15 @@ class CreateMoviesTable extends Migration
             $table->string('type')->nullable();
             $table->string('title')->nullable();
             $table->string('title_alternative')->nullable();
-            $table->string('tagline')->nullable();
+            $table->text('tagline')->nullable();
             $table->text('description')->nullable();
             $table->integer('year')->nullable();
             $table->string('poster')->nullable();
             $table->string('trailer')->nullable();
             $table->string('age')->nullable();
-            $table->json('actors')->default(new Expression('(JSON_ARRAY())'));
-            $table->json('countries')->default(new Expression('(JSON_ARRAY())'));
-            $table->json('genres')->default(new Expression('(JSON_ARRAY())'));
+            $table->json('actors')->nullable();
+            $table->json('countries')->nullable();
+            $table->json('genres')->nullable();
             $table->string('budget')->nullable();
             $table->string('premiere_world')->nullable();
 
