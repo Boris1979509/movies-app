@@ -9,10 +9,10 @@ use Exception;
 
 
 /**
- * Class MoviesUpdate
+ * Class MoviesUpdateCommand
  * @package App\Console\Commands
  */
-class MoviesUpdate extends Command
+class MoviesUpdateCommand extends Command
 {
     /**
      * The name and signature of the console command.
@@ -26,7 +26,7 @@ class MoviesUpdate extends Command
      *
      * @var string
      */
-    protected $description = 'Command description';
+    protected $description = 'Getting data via the api and saving to the database';
 
     /**
      * @return void
