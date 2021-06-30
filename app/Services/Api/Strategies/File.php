@@ -1,22 +1,27 @@
 <?php
 
-namespace App\Services\Api\Resources;
+namespace App\Services\Api\Strategies;
 
 use App\Models\Movie;
-use App\Services\Api\ApiStrategy;
+use App\Services\Api\ApiStrategyInterface;
 use App\Services\Api\BaseData;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Support\Facades\Storage;
 
 /**
  * Class File
- * @package App\Services\Api\Resources
+ * @package App\Services\Api\Strategies
  */
-class File extends BaseData
+class File //extends BaseData
 {
     /**
+     * @var array $data
+     */
+    private $data;
+
+    /**
      * @return mixed
-     * @return ApiStrategy
+     * @return ApiStrategyInterface
      * @throws FileNotFoundException
      */
     public function getData()
@@ -31,23 +36,6 @@ class File extends BaseData
      */
     public function saveData()
     {
-        foreach ($this->data['movies'] as $key => $value) {
-            Movie::updateOrCreate(['id_kinopoisk' => $value['id_kinopoisk']], [
-                'id_kinopoisk'      => $value['id_kinopoisk'],
-                'url'               => $value['url'],
-                'type'              => $value['type'],
-                'title'             => $value['title'],
-                'title_alternative' => $value['title_alternative'],
-                'tagline'           => $value['tagline'],
-                'description'       => $value['description'],
-                'year'              => $value['year'],
-                'poster'            => $value['poster'],
-                'trailer'           => $value['trailer'],
-                'age'               => $value['age'],
-                'actors'            => $value['actors'],
-                'countries'         => $value['countries'],
-                'genres'            => $value['genres'],
-            ]);
-        }
+        echo 'File saved.';
     }
 }

@@ -3,28 +3,31 @@
 namespace App\Services\Api;
 
 /**
- * Class Context
+ * Class ContextStrategy
  * @package App\Services\Api
  */
-class Context
+class ContextStrategy
 {
     /**
-     * @var ApiStrategy $instance
+     * @var ApiStrategyInterface $instance
      */
     private $instance;
 
     /**
-     * Context constructor.
-     * @param ApiStrategy $instance
+     * ContextStrategy constructor.
+     * @param ApiStrategyInterface $instance
      */
-    public function __construct(ApiStrategy $instance)
+    public function __construct(ApiStrategyInterface $instance)
     {
         $this->instance = $instance;
     }
 
+    /**
+     * @return void
+     */
     public function execute()
     {
-        $this->instance->getData()->saveData();
+        $this->instance->request()->handle();
     }
 
 }

@@ -3,20 +3,20 @@
 namespace App\Services\Api;
 
 /**
- * Interface ApiStrategy
+ * Interface ApiStrategyInterface
  * @package App\Services\Api
  */
-interface ApiStrategy
+interface ApiStrategyInterface
 {
     /**
      * @return mixed
-     * @return ApiStrategy
+     * @return ApiStrategyInterface
      */
-    public function getData();
+    public function request();
 
     /**
      * @return void
      */
-    public function saveData();
+    public function handle();
 
 }
