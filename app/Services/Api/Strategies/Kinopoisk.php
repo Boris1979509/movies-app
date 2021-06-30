@@ -3,7 +3,6 @@
 namespace App\Services\Api\Strategies;
 
 use App\Models\Movie;
-use App\Services\Api\ApiStrategyInterface;
 use App\Services\Api\BaseData;
 use Exception;
 use Illuminate\Support\Facades\Http;
@@ -18,7 +17,7 @@ class Kinopoisk extends BaseData
     const ITER = 10;
 
     /**
-     * @return ApiStrategyInterface
+     * @return $this|mixed
      * @throws Exception
      */
     public function request()
