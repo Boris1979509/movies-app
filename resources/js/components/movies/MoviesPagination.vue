@@ -6,10 +6,10 @@
                     <li class="page-item"
                         v-for="(link, idx) in pagination.links"
                         :key="idx"
-                        @click.prevent="fetchMovies(link.url)"
+                        @click.prevent="paginate(link.url)"
                         :class="{active: link.active}"
                     >
-                        <a class="page-link" :href="link.url">
+                        <a class="page-link" href="#">
                             {{ link.label }}
                         </a>
                     </li>
@@ -29,10 +29,36 @@
                 type: Object
             }
         },
+        data() {
+            return {
+                flag: false
+            }
+        },
         methods: {
             // import name, action name
             ...mapActions("movies", ["fetchMovies"]),
+            onPageQueryChange({page}) {
+                if (this.flag){
+                    const currentPage = `${this.pagination.path}?page=${page}`;
+                    this.fetchMovies(currentPage);
+                }
+            },
+            paginate(link) {
+                this.fetchMovies(link);
+                this.flag = true;
+            }
         },
+        watch: {
+            // "$route.query": {
+            //     handler: "onPageQueryChange",
+            //     immediate: true,
+            //     deep: true
+            // },
+            // pagination() {
+            //     if (this.flag)
+            //         this.$router.push({query: {page: this.pagination.current_page}});
+            // }
+        }
     }
 </script>
 

@@ -3,7 +3,10 @@ import 'bootstrap'
 import axios from "axios";
 import App from "./components/App";
 import store from "./store";
+import router from "./router";
 
-createApp(App)
-    .use(store, axios)
-    .mount("#app");
+window.axios = axios;
+const app = createApp(App);
+app.use(store)
+    .use(router);
+window.vm = app.mount("#app");

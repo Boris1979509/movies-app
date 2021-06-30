@@ -1,7 +1,6 @@
 <template>
     <div class="container">
         <div class="row justify-content-start">
-            <h1 class="title my-4 text-center text-white">{{ $store.state.title }}</h1>
             <template v-if="isExists">
                 <div class="col-md-3 col-12" v-for="(movie, idx) in movies" :key="idx">
                     <movie-item

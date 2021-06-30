@@ -14,3 +14,7 @@ yarn-error.log
 /.idea
 /.vscode
 /.editorconfig
+/public/css
+/public/js
+/public/fonts
+bash.exe.stackdump

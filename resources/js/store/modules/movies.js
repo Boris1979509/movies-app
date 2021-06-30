@@ -50,7 +50,8 @@ export default {
                         prev_page_url: response.prev_page_url,
                         next_page_url: response.next_page_url,
                         links: response.links,
-                        total: response.total
+                        total: response.total,
+                        path: response.path
                     };
                     console.log(response);
                     commit('SET_PAGINATE', paginate);
