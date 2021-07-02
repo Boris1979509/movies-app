@@ -1,5 +1,5 @@
 <?php
 return [
-    'Hello' => 'Привет',
+    'successfully deleted' => 'Фильм :title успешно удалён.',
 ];
 

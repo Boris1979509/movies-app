@@ -1,4 +1,15 @@
 <template>
+    <Modal
+        v-if="showModal"
+        @close="showModal = false"
+        @confirmation="handleConfirmation"
+        @removeMovie="onRemoveMovie"
+    >
+        <template v-slot:body>
+            <div class="modal-title alert alert-info" v-html="modalTitle">
+            </div>
+        </template>
+    </Modal>
     <div class="container">
         <div class="row justify-content-start">
             <template v-if="isExists">
@@ -6,6 +17,7 @@
                     <movie-item
                         @mouseover.native="onMouseOver(movie.poster)"
                         :movie="movie"
+                        @confirmation="handleConfirmation"
                     />
                 </div>
             </template>
@@ -18,9 +30,18 @@
 
 <script>
     import MovieItem from "./MovieItem";
+    import Modal from "../modal/Modal";
+    import {mapActions, mapGetters} from "vuex";
 
     export default {
         name: "MoviesList",
+        emits: ["changePoster"],
+        data() {
+            return {
+                showModal: false,
+                modalTitle: ""
+            }
+        },
         props: {
             movies: {
                 type: Array,
@@ -32,14 +53,28 @@
         computed: {
             isExists() {
                 return Boolean(this.movies.length);
-            }
+            },
+            ...mapGetters("movies", ["deleteId"])
         },
         components: {
-            MovieItem
+            MovieItem,
+            Modal
         },
         methods: {
+            ...mapActions("movies", ["addDeleteId", "removeDeleteId", "removeMovie"]),
             onMouseOver(poster) {
                 this.$emit('changePoster', poster);
+            },
+            handleConfirmation(confirm, data = {}) {
+                this.showModal = confirm;
+                if (Object.keys(data).length) {
+                    this.modalTitle = `Вы действительно хотите удалить фильм <strong>"${data.title}"</strong>?`;
+                }
+                confirm ? this.addDeleteId(data.id) : this.removeDeleteId();
+            },
+            onRemoveMovie() {
+                this.removeMovie(this.deleteId);
+                this.showModal = false;
             }
         }
     }

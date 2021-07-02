@@ -11,7 +11,7 @@
                     <button class="btn btn-sm btn-outline-light w-100">Edit</button>
                 </div>
                 <div class="col">
-                    <button class="btn btn-sm btn-outline-danger w-100">Remove</button>
+                    <button class="btn btn-sm btn-outline-danger w-100" @click="confirmation">Remove</button>
                 </div>
             </div>
         </div>
@@ -21,6 +21,7 @@
 <script>
     export default {
         name: "MovieItem",
+        emits: ["confirmation"],
         props: {
             movie: {
                 type: Object,
@@ -32,6 +33,15 @@
                 return {
                     backgroundImage: `url(${this.movie.poster})`
                 }
+            }
+        },
+        methods: {
+            confirmation() {
+                const data = {
+                    id: this.movie.id,
+                    title: this.movie.title
+                };
+                this.$emit("confirmation", true, data);
             }
         }
     }

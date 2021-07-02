@@ -63,13 +63,18 @@ class MovieController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
-     *
      * @param int $id
-     * @return Response
+     * @return void
      */
     public function destroy($id)
     {
-        //
+        try {
+            $movie = Movie::find($id);
+            $movie->delete();
+            $message = ['message' => __('messages.successfully deleted', ['title' => '"' . $movie->title . '"'])];
+            return response()->json($message);
+        } catch (\Exception $error) {
+            exit($error->getMessage());
+        }
     }
 }

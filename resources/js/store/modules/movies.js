@@ -5,13 +5,20 @@ function serializeResponse(data) {
     return data.reduce((acc, movie) => acc[movie.id] = movie, {});
 }
 
-const {SET_MOVIES, SET_PAGINATE} = mutations; // Response data movies
+const {
+    SET_MOVIES,
+    SET_PAGINATE,
+    REMOVE_MOVIE,
+    ADD_ID_ON_DELETE,
+    REMOVE_ID_ON_DELETE
+} = mutations;
 
 export default {
     namespaced: true,
     state: {
         movies: [],
-        pagination: {}
+        pagination: {},
+        deleteId: ""
     },
     getters: {
         pagination(state) {
@@ -19,6 +26,9 @@ export default {
         },
         movies(state) {
             return state.movies;
+        },
+        deleteId(state) {
+            return state.deleteId;
         }
     },
     mutations: {
@@ -27,6 +37,15 @@ export default {
         },
         [SET_PAGINATE](state, data) {
             state.pagination = data;
+        },
+        [REMOVE_MOVIE](state, idx) {
+            state.movies.splice(idx, 1);
+        },
+        [ADD_ID_ON_DELETE](state, id) {
+            state.deleteId = id;
+        },
+        [REMOVE_ID_ON_DELETE](state) {
+            state.deleteId = "";
         }
     },
     actions: {
@@ -51,7 +70,6 @@ export default {
                         next_page_url: response.next_page_url,
                         links: response.links,
                         total: response.total,
-                        path: response.path
                     };
                     commit('SET_PAGINATE', paginate);
                 })
@@ -60,6 +78,27 @@ export default {
                 }).finally(() => {
                     dispatch("toggleLoader", false, {root: true});
                 });
+        },
+        async removeMovie({commit, state, dispatch}, id) {
+            try {
+                const response = await axios.delete("api/movies/" + id);
+                const index = state.movies.findIndex(item => item.id === id);
+                if (index === -1) {
+                    throw new Error("Index не найден.");
+                }
+                alert(response.message);
+                commit("REMOVE_MOVIE", index);
+                dispatch("fetchMovies");
+
+            } catch (error) {
+                console.log(error.message);
+            }
+        },
+        addDeleteId({commit}, id) {
+            commit('ADD_ID_ON_DELETE', id);
+        },
+        removeDeleteId({commit}) {
+            commit('REMOVE_ID_ON_DELETE');
         }
     }
 }
