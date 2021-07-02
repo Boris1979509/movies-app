@@ -5,8 +5,13 @@
 // Variables
 @import 'variables';
 
+html, body {
+    min-height: 100vh
+}
+
 #app {
     position: relative;
+    min-height: 100vh
 }
 
 

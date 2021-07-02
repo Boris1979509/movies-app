@@ -5,7 +5,7 @@ function serializeResponse(data) {
     return data.reduce((acc, movie) => acc[movie.id] = movie, {});
 }
 
-const {SET_MOVIES} = mutations; // Response data movies
+const {SET_MOVIES, SET_PAGINATE} = mutations; // Response data movies
 
 export default {
     namespaced: true,
@@ -25,7 +25,7 @@ export default {
         [SET_MOVIES](state, data) {
             state.movies = data
         },
-        SET_PAGINATE(state, data) {
+        [SET_PAGINATE](state, data) {
             state.pagination = data;
         }
     },
@@ -37,10 +37,10 @@ export default {
             },
             root: true,
         },
-        async fetchMovies({commit}, pageUrl) {
+        async fetchMovies({commit, dispatch}, pageUrl) {
             pageUrl = pageUrl || "api/movies";
-
-            axios.get(pageUrl)
+            dispatch("toggleLoader", true, {root: true});
+            await axios.get(pageUrl)
                 .then(response => { // serializeResponse(response.data)
                     commit('SET_MOVIES', response.data);
                     const paginate = {
@@ -53,12 +53,13 @@ export default {
                         total: response.total,
                         path: response.path
                     };
-                    console.log(response);
                     commit('SET_PAGINATE', paginate);
                 })
                 .catch(e => {
                     console.log(e);
-                })
+                }).finally(() => {
+                    dispatch("toggleLoader", false, {root: true});
+                });
         }
     }
 }

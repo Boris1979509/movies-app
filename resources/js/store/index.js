@@ -1,12 +1,14 @@
 import {createStore} from 'vuex'
 import movies from "./modules/movies";
+import loader from "./modules/loader"
 
 const store = createStore({
     state: {
         title: "Кинопоиск API"
     },
     modules: {
-        movies
+        movies,
+        loader
     }
 });
 store.dispatch('initMoviesStore').then(() => console.log('Init movies'));
