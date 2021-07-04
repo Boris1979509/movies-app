@@ -15,7 +15,6 @@
     import _ from 'lodash';
     import {mapActions} from "vuex";
 
-    const vm = this;
     export default {
         name: "Header",
         data() {
