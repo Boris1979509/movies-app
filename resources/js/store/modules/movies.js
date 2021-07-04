@@ -87,8 +87,12 @@ export default {
                     }
 
                 })
-                .catch(e => {
-                    console.log(e);
+                .catch(error => {
+                    dispatch("notification/showNotify", { // namespaced
+                        msg: error.message,
+                        title: "Error.",
+                        label: "alert-danger"
+                    }, {root: true});
                 }).finally(() => {
                     dispatch("toggleLoader", false, {root: true}); // stop preloader
                 });
@@ -100,12 +104,20 @@ export default {
                 if (index === -1) {
                     throw Error("Index не найден.");
                 }
-                alert(response.message);
+                dispatch("notification/showNotify", { // namespaced
+                    msg: response.message,
+                    title: "Сообщение об удалении.",
+                    label: "alert-success"
+                }, {root: true});
                 commit("REMOVE_MOVIE", index);
                 dispatch("fetchMovies");
 
             } catch (error) {
-                console.log(error.message);
+                dispatch("notification/showNotify", { // namespaced
+                    msg: error.message,
+                    title: "Error.",
+                    label: "alert-danger"
+                }, {root: true});
             }
         },
         addDeleteId({commit}, id) {
