@@ -1,6 +1,6 @@
-import {createStore} from 'vuex'
+import {createStore} from 'vuex';
 import movies from "./modules/movies";
-import loader from "./modules/loader"
+import loader from "./modules/loader";
 
 const store = createStore({
     state: {

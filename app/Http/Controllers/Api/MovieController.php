@@ -20,12 +20,20 @@ class MovieController extends Controller
     const LIMIT_PER_PAGE = 8;
 
     /**
+     * @param Request $request
      * @return JsonResponse
      */
-    public function index()
+    public function index(Request $request)
     {
-        return response()->json(
-            Movie::latest()->paginate(self::LIMIT_PER_PAGE)); // order results by date
+        if ($value = $request->get('search')) {
+            $paginator = Movie::where('title', 'like', '%' . $value . '%')
+                ->paginate(self::LIMIT_PER_PAGE);
+//                ->withPath('?' . $request->getQueryString());
+        } else {
+            $paginator = Movie::latest()->paginate(self::LIMIT_PER_PAGE);
+        }
+
+        return response()->json($paginator); // order results by date
     }
 
     /**

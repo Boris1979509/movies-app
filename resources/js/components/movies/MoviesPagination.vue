@@ -37,15 +37,14 @@
         methods: {
             // import name, action name
             ...mapActions("movies", ["fetchMovies"]),
-            onPageQueryChange({page}) {
-                if (this.flag){
-                    const currentPage = `${this.pagination.path}?page=${page}`;
-                    this.fetchMovies(currentPage);
-                }
-            },
-            paginate(link) {
-                this.fetchMovies(link);
-                this.flag = true;
+            // onPageQueryChange({page}) {
+            //     if (this.flag){
+            //         const currentPage = `${this.pagination.path}?page=${page}`;
+            //         this.fetchMovies(currentPage);
+            //     }
+            // },
+            paginate(pageUrl) {
+                this.fetchMovies({pageUrl});
             }
         },
         watch: {

@@ -1,5 +1,6 @@
 <template>
     <Loader/>
+    <Header/>
     <!--    <div id="nav">-->
     <!--        <router-link to="/">Home</router-link>-->
     <!--    </div>-->
@@ -8,11 +9,13 @@
 
 <script>
     import Loader from "./loader/Loader";
+    import Header from "./header/Header";
 
     export default {
         name: "App",
         components: {
-            Loader
+            Loader,
+            Header
         }
     }
 </script>

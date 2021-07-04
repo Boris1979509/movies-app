@@ -10,8 +10,12 @@
             </div>
         </template>
     </Modal>
-    <div class="container">
+    <div class="container movies-list">
+        <div class="row">
+            <h1 class="text-center">{{ moviesTitle }}</h1>
+        </div>
         <div class="row justify-content-start">
+
             <template v-if="isExists">
                 <div class="col-md-3 col-12" v-for="(movie, idx) in movies" :key="idx">
                     <movie-item
@@ -54,7 +58,10 @@
             isExists() {
                 return Boolean(this.movies.length);
             },
-            ...mapGetters("movies", ["deleteId"])
+            ...mapGetters("movies", ["deleteId", "searchTitle"]),
+            moviesTitle() {
+                return this.searchTitle ? `Результаты поиска: "${this.searchTitle}"` : this.$store.state.title
+            }
         },
         components: {
             MovieItem,
@@ -81,5 +88,11 @@
 </script>
 
 <style scoped>
+    .movies-list {
+        padding: 70px 0 70px 0
+    }
 
+    .movies-list h1 {
+        color: #fff;
+    }
 </style>
