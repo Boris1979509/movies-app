@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\Movie;
+use App\Repositories\MovieRepository;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -18,6 +18,19 @@ class MovieController extends Controller
      * Paginate
      */
     const LIMIT_PER_PAGE = 8;
+    /**
+     * @var MovieRepository $repository
+     */
+    private $repository;
+
+    /**
+     * MovieController constructor.
+     * @param MovieRepository $repository
+     */
+    public function __construct(MovieRepository $repository)
+    {
+        $this->repository = $repository;
+    }
 
     /**
      * @param Request $request
@@ -25,12 +38,13 @@ class MovieController extends Controller
      */
     public function index(Request $request)
     {
-        if ($value = $request->get('search')) {
-            $paginator = Movie::where('title', 'like', '%' . $value . '%')
-                ->paginate(self::LIMIT_PER_PAGE);
+        if ($title = $request->get('search')) {
+            $paginator = $this->repository
+                ->getMoviesBySearchWithPaginate(self::LIMIT_PER_PAGE, $title);
 //                ->withPath('?' . $request->getQueryString());
         } else {
-            $paginator = Movie::latest()->paginate(self::LIMIT_PER_PAGE);
+            $paginator = $this->repository
+                ->getMoviesLatestWithPaginate(self::LIMIT_PER_PAGE);
         }
 
         return response()->json($paginator); // order results by date
@@ -77,7 +91,7 @@ class MovieController extends Controller
     public function destroy($id)
     {
         try {
-            $movie = Movie::find($id);
+            $movie = $this->repository->find($id);
             $movie->delete();
             $message = ['message' => __('messages.successfully deleted', ['title' => '"' . $movie->title . '"'])];
             return response()->json($message);

@@ -110,14 +110,15 @@ export default {
                     label: "alert-success"
                 }, {root: true});
                 commit("REMOVE_MOVIE", index);
-                dispatch("fetchMovies");
-
             } catch (error) {
                 dispatch("notification/showNotify", { // namespaced
                     msg: error.message,
                     title: "Error.",
                     label: "alert-danger"
                 }, {root: true});
+            } finally {
+                dispatch("fetchMovies");
+                dispatch("toggleSearch", "");
             }
         },
         addDeleteId({commit}, id) {
