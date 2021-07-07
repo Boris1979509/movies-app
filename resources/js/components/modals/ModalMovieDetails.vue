@@ -22,7 +22,8 @@
                                 <h3 v-html="movie.title"></h3>
                                 <small>{{ movie.year + genres }}</small>
                             </div>
-                            <div class="movie-rating">
+                            <div class="movie-rating-imdb">
+                                <b>IMDB:</b>
                                 <star-rating
                                     v-model:rating="rating"
                                     :increment="0.1"
@@ -72,7 +73,7 @@
         data() {
             return {
                 defaultPosterBg: "linear-gradient(45deg, rgb(0, 3, 38) 0%, rgb(82, 15, 117) 100%)",
-                rating: 6.2,
+                rating: this.movie.rating_imdb,
             }
         },
         computed: {

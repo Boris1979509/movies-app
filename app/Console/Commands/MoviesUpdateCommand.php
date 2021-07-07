@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Services\Api\ContextStrategy;
+use App\Services\Api\Strategies\File;
 use App\Services\Api\Strategies\Kinopoisk;
 use Illuminate\Console\Command;
 use Exception;
@@ -34,7 +35,7 @@ class MoviesUpdateCommand extends Command
     public function handle()
     {
         try {
-            (new ContextStrategy(app(Kinopoisk::class)))->execute();
+            (new ContextStrategy(app(File::class)))->execute();
             $this->info('The command was successful!');
         } catch (Exception $error) {
             exit($error->getMessage());

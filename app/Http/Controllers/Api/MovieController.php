@@ -47,7 +47,8 @@ class MovieController extends Controller
             'description',
             'genres',
             'actors',
-            'countries'
+            'countries',
+            'rating_imdb'
         ];
         if ($title = $request->get('search')) {
             $paginator = $this->repository

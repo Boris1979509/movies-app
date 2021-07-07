@@ -64,8 +64,9 @@ class Movie extends Model
     use HasFactory, SoftDeletes;
     protected $guarded = [];
     protected $casts = [
-        'actors'    => 'object',
-        'countries' => 'object',
-        'genres'    => 'object',
+        'actors'      => 'object',
+        'countries'   => 'object',
+        'genres'      => 'object',
+        //'rating_imdb' => 'float',
     ];
 }

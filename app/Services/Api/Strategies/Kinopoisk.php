@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Http;
 class Kinopoisk extends BaseData
 {
 
-    const ITER = 10;
+    const ITER = 5;
 
     /**
      * @return $this|mixed
@@ -35,9 +35,13 @@ class Kinopoisk extends BaseData
 
     /**
      * @return void
+     * @throws Exception
      */
     public function handle()
     {
+        if ($this->data['error']) { // limit requests
+            throw new \RuntimeException(__('messages.' . $this->data['error']['message']));
+        }
         foreach ($this->data['movies'] as $key => $value) {
             Movie::updateOrCreate(['id_kinopoisk' => $value['id_kinopoisk']], [
                 'id_kinopoisk'      => $value['id_kinopoisk'],
@@ -54,6 +58,9 @@ class Kinopoisk extends BaseData
                 'actors'            => $value['actors'],
                 'countries'         => $value['countries'],
                 'genres'            => $value['genres'],
+                'premiere_world'    => $value['premiere_world'],
+                'rating_kinopoisk'  => $value['rating_kinopoisk'],
+                'rating_imdb'       => $value['rating_imdb'],
             ]);
         }
     }
