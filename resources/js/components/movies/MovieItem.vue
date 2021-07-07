@@ -8,10 +8,11 @@
             </div>
             <div class="movie-item__controls row no-gutters">
                 <div class="col">
-                    <button class="btn btn-sm btn-outline-light w-100">Edit</button>
+                    <button @click="showDetailModal" class="btn btn-sm btn-outline-light w-100">Детали</button>
+                    <!--                    <button @click="$router.push({ name: 'movie', params: { id: movie.id, url: movie.url }})" class="btn btn-sm btn-outline-light w-100">Детали</button>-->
                 </div>
                 <div class="col">
-                    <button class="btn btn-sm btn-outline-danger w-100" @click="confirmation">Remove</button>
+                    <button class="btn btn-sm btn-outline-danger w-100" @click="confirmation">Удалить</button>
                 </div>
             </div>
         </div>
@@ -21,7 +22,7 @@
 <script>
     export default {
         name: "MovieItem",
-        emits: ["confirmation"],
+        emits: ["confirmation", "showDetailMovieModal"],
         props: {
             movie: {
                 type: Object,
@@ -42,6 +43,9 @@
                     title: this.movie.title
                 };
                 this.$emit("confirmation", true, data);
+            },
+            showDetailModal() {
+                this.$emit("showDetailMovieModal", this.movie.id)
             }
         }
     }

@@ -38,13 +38,28 @@ class MovieController extends Controller
      */
     public function index(Request $request)
     {
+        $columns = [
+            'id',
+            'title',
+            'poster',
+            'year',
+            'url',
+            'description',
+            'genres',
+            'actors',
+            'countries'
+        ];
         if ($title = $request->get('search')) {
             $paginator = $this->repository
-                ->getMoviesBySearchWithPaginate(self::LIMIT_PER_PAGE, $title);
+                ->getMoviesBySearchWithPaginate(
+                    self::LIMIT_PER_PAGE,
+                    $title, $columns
+                );
 //                ->withPath('?' . $request->getQueryString());
         } else {
             $paginator = $this->repository
-                ->getMoviesLatestWithPaginate(self::LIMIT_PER_PAGE);
+                ->getMoviesLatestWithPaginate(self::LIMIT_PER_PAGE,
+                    $columns);
         }
 
         return response()->json($paginator); // order results by date
@@ -91,7 +106,7 @@ class MovieController extends Controller
     public function destroy($id)
     {
         try {
-            $movie = $this->repository->find($id);
+            $movie = $this->repository->find($id, ['id', 'title', 'poster', 'year', 'url']);
             $movie->delete();
             $message = ['message' => __('messages.successfully deleted', ['title' => '"' . $movie->title . '"'])];
             return response()->json($message);

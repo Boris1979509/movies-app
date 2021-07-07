@@ -1,15 +1,20 @@
 <template>
-    <Modal
-        v-if="showModal"
-        @close="showModal = false"
+    <modal-confirmation
+        v-if="modalConfirmation"
+        @close="modalConfirmation = false"
         @confirmation="handleConfirmation"
         @removeMovie="onRemoveMovie"
     >
         <template v-slot:body>
-            <div class="modal-title alert alert-info" v-html="modalTitle">
+            <div class="modal-title alert alert-info" v-html="modalConfirmationTitle">
             </div>
         </template>
-    </Modal>
+    </modal-confirmation>
+    <modal-movie-details
+        v-if="isModalMovieDetails"
+        @close="isModalMovieDetails = false"
+        :movie="selectedMovie"
+    />
     <div class="container movies-list">
         <div class="row">
             <h1 class="text-center">{{ moviesTitle }}</h1>
@@ -22,6 +27,7 @@
                         @mouseover.native="onMouseOver(movie.poster)"
                         :movie="movie"
                         @confirmation="handleConfirmation"
+                        @showDetailMovieModal="showDetailMovieModal"
                     />
                 </div>
             </template>
@@ -34,16 +40,19 @@
 
 <script>
     import MovieItem from "./MovieItem";
-    import Modal from "../modal/Modal";
+    import ModalConfirmation from "../modals/ModalConfirmation";
     import {mapActions, mapGetters} from "vuex";
+    import ModalMovieDetails from "../modals/ModalMovieDetails";
 
     export default {
         name: "MoviesList",
         emits: ["changePoster"],
         data() {
             return {
-                showModal: false,
-                modalTitle: ""
+                modalConfirmation: false,
+                modalConfirmationTitle: "",
+                isModalMovieDetails: false,
+                selectedMovieId: ""
             }
         },
         props: {
@@ -61,11 +70,15 @@
             ...mapGetters("movies", ["deleteId", "searchTitle"]),
             moviesTitle() {
                 return this.searchTitle ? `Результаты поиска: "${this.searchTitle}"` : this.$store.state.title
+            },
+            selectedMovie() {
+                return this.selectedMovieId ? this.movies.find(movie => movie.id === this.selectedMovieId) : null;
             }
         },
         components: {
             MovieItem,
-            Modal
+            ModalConfirmation,
+            ModalMovieDetails
         },
         methods: {
             ...mapActions("movies", ["addDeleteId", "removeDeleteId", "removeMovie"]),
@@ -73,15 +86,19 @@
                 this.$emit('changePoster', poster);
             },
             handleConfirmation(confirm, data = {}) {
-                this.showModal = confirm;
+                this.modalConfirmation = confirm;
                 if (Object.keys(data).length) {
-                    this.modalTitle = `Вы действительно хотите удалить фильм <strong>"${data.title}"</strong>?`;
+                    this.modalConfirmationTitle = `Вы действительно хотите удалить фильм <strong>"${data.title}"</strong>?`;
                 }
                 confirm ? this.addDeleteId(data.id) : this.removeDeleteId();
             },
             onRemoveMovie() {
                 this.removeMovie(this.deleteId);
-                this.showModal = false;
+                this.modalConfirmation = false;
+            },
+            showDetailMovieModal(id) {
+                this.isModalMovieDetails = true;
+                this.selectedMovieId = id
             }
         }
     }
